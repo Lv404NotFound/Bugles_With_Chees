@@ -62,10 +62,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.633535, 0)
 shape = SubResource("CapsuleShape3D_yi014")
 disabled = true
 
-[node name="Head" type="Node3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Player/Head"]
-
 [node name="RayCast3D" type="RayCast3D" parent="Player"]
 target_position = Vector3(0, 2, 0)
+
+[node name="nek" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Head" type="Node3D" parent="Player/nek"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/nek/Head"]
