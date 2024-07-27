@@ -215,3 +215,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 libraries = {
 "": SubResource("AnimationLibrary_x058c")
 }
+
+[node name="Hands" type="Node3D" parent="Player"]
+
+[node name="lefthand" type="CSGBox3D" parent="Player/Hands"]
+transform = Transform3D(0.042486, 0, 0.133945, 0, 0.185977, 0, -0.999097, 0, 0.00569594, 0.462808, 1.13268, -0.226673)
+
+[node name="righthand" type="CSGBox3D" parent="Player/Hands"]
+transform = Transform3D(0.042486, 0, 0.133945, 0, 0.185977, 0, -0.999097, 0, 0.00569594, -0.480198, 1.13268, -0.226673)
+
+[node name="Katana" type="CSGBox3D" parent="Player/Hands"]
+transform = Transform3D(0.566749, -0.0284466, 0.046296, 0.156492, 0.103022, 0.0127833, -0.254115, 0, 0.111126, -0.189672, 1.2214, -0.852136)

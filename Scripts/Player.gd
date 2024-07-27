@@ -10,10 +10,13 @@ extends CharacterBody3D
 @onready var camera_3d = $nek/Head/eyes/Camera3D
 @onready var eyes = $nek/Head/eyes
 @onready var animation_player = $nek/Head/eyes/AnimationPlayer
+@onready var hands = $Hands
+@onready var lefthand = $Hands/lefthand
+@onready var righthand = $Hands/righthand
+@onready var katana = $Hands/Katana
 
 
 # Speed Vars
-
 var current_speed = 5.0 # Variable to store the current speed of the player
 
 var walking_speed = 5.0 # Speed when the player is walking
