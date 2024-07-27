@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var nek = $nek # Reference to the player's neck node
 @onready var camera_3d = $nek/Head/eyes/Camera3D
 @onready var eyes = $nek/Head/eyes
+@onready var animation_player = $nek/Head/eyes/AnimationPlayer
 
 
 # Speed Vars
@@ -56,8 +57,11 @@ const jump_velocity = 4.5 # Velocity applied when the player jumps
 var crouching_depth = -0.5 # Depth to which the player crouches
 
 var lerp_speed = 10.0 # Speed at which the interpolation happens
+var air_lerp_speed = 3.0
 
 var free_look_tilt_amount = 8 # Amount of tilt when free looking
+
+var last_velocity = Vector3.ZERO
 
 # Input vars
 
@@ -124,13 +128,13 @@ func _physics_process(delta):
 		free_looking = true
 		
 		if sliding:
-			camera_3d.rotation.z = lerp(camera_3d.rotation.z,-deg_to_rad(7.0),delta*lerp_speed)
+			eyes.rotation.z = lerp(eyes.rotation.z,-deg_to_rad(7.0),delta*lerp_speed)
 		else:
-				camera_3d.rotation.z = -deg_to_rad(nek.rotation.y * free_look_tilt_amount)
+				eyes.rotation.z = -deg_to_rad(nek.rotation.y * free_look_tilt_amount)
 	else:
 		free_looking = false
 		nek.rotation.y = lerp(nek.rotation.y, 0.0, delta * lerp_speed)
-		camera_3d.rotation.z = lerp(camera_3d.rotation.z, 0.0, delta * lerp_speed)
+		eyes.rotation.z = lerp(eyes.rotation.z, 0.0, delta * lerp_speed)
 		
 	# Handle sliding
 	if sliding:
@@ -170,12 +174,24 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor(): 
 		velocity.y = jump_velocity 
 		sliding = false
+		animation_player.play("jumping")
+		
+		
+	#landing
+	if is_on_floor():
+		if last_velocity.y < -10.0:
+			animation_player.play("Roll")
+		elif last_velocity.y < -4.0:
+			animation_player.play("Landing")
 
 	# Handle movement and deceleration
-	direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed) 
-	
+	if is_on_floor():
+		direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed) 
+	else:
+		direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * air_lerp_speed) 
 	if sliding:
-		direction = (transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
+		if input_dir != Vector2.ZERO:
+			direction = (transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
 	
 	if direction:
 		velocity.x = direction.x * current_speed 
@@ -188,5 +204,7 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, current_speed) 
 		velocity.z = move_toward(velocity.z, 0, current_speed) 
-
+		
+	last_velocity = velocity
 	move_and_slide() 
+	
