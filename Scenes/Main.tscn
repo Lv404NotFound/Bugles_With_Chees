@@ -70,4 +70,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 
 [node name="Head" type="Node3D" parent="Player/nek"]
 
-[node name="Camera3D" type="Camera3D" parent="Player/nek/Head"]
+[node name="eyes" type="Node3D" parent="Player/nek/Head"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/nek/Head/eyes"]
